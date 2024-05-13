@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Appointment Form</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+        }
+        .container {
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #fff;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        input[type="text"],
+        select,
+        textarea {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+            box-sizing: border-box;
+        }
+        textarea {
+            height: 100px;
+            resize: vertical;
+        }
+        input[type="submit"] {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 3px;
+            padding: 10px 20px;
+            cursor: pointer;
+        }
+        #copyButton {
+            display: none;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 3px;
+            padding: 10px 20px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        #copyButton:hover {
+            background-color: #0056b3;
+        }
+
+        /* Radio button styles */
+        input[type="radio"] {
+          display: inline;
+          margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <center><h2>Appointment Form</h2></center>
+        <form id="appointmentForm">
+            <div class="form-group">
+                <label for="firstName">User First Name:</label>
+                <input type="text" id="firstName" name="firstName" required>
+            </div>
+            <div class="form-group">
+                <label for="lastName">User Last Name:</label>
+                <input type="text" id="lastName" name="lastName" required>
+            </div>
+            <div class="form-group">
+                <label for="category">Category:</label>
+                <select id="category" name="category" required>
+                    <option value="">Select Category</option>
+                    <option value="Phone appointment">Phone appointment</option>
+                    <option value="Video appointment">Video appointment</option>
+                    <option value="In-Person appointment">In-Person appointment</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="degree">Degree:</label>
+                <select id="degree" name="degree" required>
+                    <option value="">Select Degree</option>
+                    <option value="Arts, Humanities, and Social Sciences">Arts, Humanities, and Social Sciences</option>
+                    <option value="Business, Technology, and Public Service">Business, Technology, and Public Service</option>
+                    <option value="Health Sciences">Health Sciences</option>
+                    <option value="Science, Engineering, and Math">Science, Engineering, and Math</option>
+                    <option value="Technical and Professional Studies">Technical and Professional Studies</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Any holds?</label><br>
+                <input type="radio" id="yes" name="holds" value="Yes" required>
+                <label for="yes">Yes</label>
+                <input type="radio" id="no" name="holds" value="No">
+                <label for="no">No</label>
+            </div>
+            <div class="form-group">
+                <label for="notes">Additional Notes:</label>
+                <textarea id="notes" name="notes"></textarea>
+            </div>
+            <input type="submit" value="Submit">
+        </form>
+        <div id="summary"></div>
+        <button id="copyButton">Copy Summary</button>
+    </div>
+
+    <script>
+        document.getElementById('appointmentForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            // Get form values
+            var firstName = document.getElementById('firstName').value;
+            var lastName = document.getElementById('lastName').value;
+
+            // Create the user identifier
+            var userIdentifier = firstName.charAt(0).toUpperCase() + lastName;
+
+            var category = document.getElementById('category').value;
+            var degree = document.getElementById('degree').value;
+            var holds = document.querySelector('input[name="holds"]:checked').value;
+            var notes = document.getElementById('notes').value;
+
+            // Format summary
+            var summary = "User: " + userIdentifier + "<br>";
+            summary += "Category: " + category + "<br>";
+            summary += "Degree: " + degree + "<br>";
+            summary += "Any holds? " + holds + "<br>";
+            summary += "Additional Notes: " + notes;
+
+            // Display summary
+            document.getElementById('summary').innerHTML = summary;
+
+            // Show copy button
+            document.getElementById('copyButton').style.display = 'inline-block';
+        });
+
+        document.getElementById('copyButton').addEventListener('click', function() {
+            // Select and copy summary text
+            var summaryText = document.getElementById('summary');
+            var range = document.createRange();
+            range.selectNode(summaryText);
+            window.getSelection().removeAllRanges();
+            window.getSelection().addRange(range);
+            document.execCommand('copy');
+            window.getSelection().removeAllRanges();
+
+            // Change button text temporarily
+            this.textContent = 'Copied!';
+            var button = this;
+            setTimeout(function() {
+                button.textContent = 'Copy Summary';
+            }, 1000);
+        });
+    </script>
+</body>
+</html>
